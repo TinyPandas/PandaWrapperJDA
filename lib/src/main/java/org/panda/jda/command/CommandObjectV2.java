@@ -146,7 +146,7 @@ public class CommandObjectV2 extends ListenerAdapter {
 
         String subcommandName = event.getSubcommandName();
         if (Objects.nonNull(subcommandName)) {
-            SubcommandObjectV2 subcommandObjectV2 = subcommandMap.get(subcommandName);
+            SubcommandObjectV2 subcommandObjectV2 = loadedSubcommands.get(subcommandName);
             if (Objects.nonNull(subcommandObjectV2)) {
                 subcommandObjectV2.processAutoCompleteInteraction(entities);
                 return;
