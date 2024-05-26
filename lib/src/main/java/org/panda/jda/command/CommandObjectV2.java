@@ -107,12 +107,14 @@ public class CommandObjectV2 extends ListenerAdapter {
 
         String subcommandName = event.getSubcommandName();
         String subCommandGroup = event.getSubcommandGroup();
+        commandLogger.info("Processing slashCommand request for name {} in group {}", subcommandName, subCommandGroup);
 
         if (Objects.nonNull(subcommandName)) {
             String subcommandKey = subcommandName.toLowerCase();
             if (Objects.nonNull(subCommandGroup)) {
                 subcommandKey = subCommandGroup.toLowerCase() + "_" + subcommandKey;
             }
+            commandLogger.info("Key {}", subcommandKey);
 
             SubcommandObjectV2 subcommandObjectV2 = loadedSubcommands.get(subcommandKey);
 
@@ -145,11 +147,23 @@ public class CommandObjectV2 extends ListenerAdapter {
         }
 
         String subcommandName = event.getSubcommandName();
+        String subCommandGroup = event.getSubcommandGroup();
+        commandLogger.info("Processing autoComplete request for name {} in group {}", subcommandName, subCommandGroup);
+
         if (Objects.nonNull(subcommandName)) {
-            SubcommandObjectV2 subcommandObjectV2 = loadedSubcommands.get(subcommandName);
+            String subcommandKey = subcommandName.toLowerCase();
+            if (Objects.nonNull(subCommandGroup)) {
+                subcommandKey = subCommandGroup.toLowerCase() + "_" + subcommandKey;
+            }
+            commandLogger.info("Key {}", subcommandKey);
+
+            SubcommandObjectV2 subcommandObjectV2 = loadedSubcommands.get(subcommandKey);
+
             if (Objects.nonNull(subcommandObjectV2)) {
                 subcommandObjectV2.processAutoCompleteInteraction(entities);
                 return;
+            } else {
+                commandLogger.info("No valid subcommand found. Processing top level command.");
             }
         }
 
@@ -161,5 +175,4 @@ public class CommandObjectV2 extends ListenerAdapter {
     }
 
     public void processAutoComplete(@NotNull EventEntities<CommandAutoCompleteInteractionEvent> entities) { }
-
 }
